@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" creationComplete="application1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.utils.Base64Encoder;
+			
+			public var cdnMap:Object = new Object(); //所有线路的集合key是线路名称，value是线路顺序（index）方便根据组合的线路取得对应的index获取相应的url
+			public var cdnArray:Array = new Array(); //cdn线路列表
+			public var bgArray:Array = new Array(); //高清，标清，极速列表
+			public var cdnobj:Object = new Array(); //cdn线路列表顺序
+			public var bgobj:Object = new Array(); //高清，标清，极速顺序
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var  playLines:Array = JSON.parse('[{"index":0,"name":"本校720p","intro":""},' +
+					'{"index":1,"name":"本校标清","intro":""},' +
+					'{"index":2,"name":"本校极速","intro":""},' +
+					'{"index":3,"name":"公网2标清","intro":""},' +
+					'{"index":4,"name":"公网1720p","intro":""},' +
+					'{"index":1,"name":"公网2720p","intro":""},' +
+					'{"index":2,"name":"公网1极速","intro":""},' +
+					'{"index":2,"name":"公网2极速","intro":""},' +
+					'{"index":3,"name":"公网1标清","intro":""}]') as Array
+				if(playLines != null ){
+					var linearray:Array = playLines;
+					var cdndic:Dictionary = new Dictionary();
+					var bgdic:Dictionary = new Dictionary();
+					for(var i:int =0;i<linearray.length;i++){
+						var cdnname:String = linearray[i].name;
+						cdnMap[cdnname]=i;
+						if(cdnname.indexOf("高清")  !=  -1){
+							if(bgdic["高清"] ==  null){
+								bgdic["高清"] =i+"";
+							}
+							if(cdndic[cdnname.replace("高清","")]  ==  null){
+								cdndic[cdnname.replace("高清","")] =i+"";
+							}
+						}else if(cdnname.indexOf("标清")  !=  -1){
+							if(bgdic["标清"] ==  null){
+								bgdic["标清"] =i+"";
+							}
+							if(cdndic[cdnname.replace("标清","")]  == null){
+								cdndic[cdnname.replace("标清","")] =i+"";
+							}
+						}else if(cdnname.indexOf("极速")  !=  -1){
+							if(bgdic["极速"] ==  null){
+								bgdic["极速"] =i+"";
+							}
+							if(cdndic[cdnname.replace("极速","")]  ==  null){
+								cdndic[cdnname.replace("极速","")] =i+"";
+							}
+						}else if(cdnname.indexOf("720p")  !=  -1){
+							if(bgdic["720p"] ==  null){
+								bgdic["720p"] =i+"";
+							}
+							if(cdndic[cdnname.replace("720p","")]  ==  null){
+								cdndic[cdnname.replace("720p","")] =i+"";
+							}
+						}else if(cdnname.indexOf("1080p")  !=  -1){
+							if(bgdic["1080p"] ==  null){
+								bgdic["1080p"] =i+"";
+							}
+							if(cdndic[cdnname.replace("1080p","")]  ==  null){
+								cdndic[cdnname.replace("1080p","")] =i+"";
+							}
+						}
+					}
+				
+				}
+				for(var cdn:String in  cdndic){
+					cdnArray.push({"name":cdn,"index":cdndic[cdn]});
+				}
+				cdnArray.sort(sortOnindex);
+				for(var j:int = 0;j<cdnArray.length;j++){
+					cdnobj[cdnArray[j].name]=j;
+				}
+				for(var bg:String in  bgdic){
+					bgArray.push({"name":bg,"index":bgdic[bg]});
+				}
+				bgArray.sort(sortOnindex);
+				for(var k:int = 0;k<bgArray.length;k++){
+					bgobj[bgArray[k].name]=k;
+				}
+			}
+			public function sortOnindex(a:Object, b:Object):Number {
+				var aPrice:int = a.index;
+				var bPrice:int = b.index;
+				if(aPrice > bPrice) {
+					return 1;
+				} else if(aPrice < bPrice) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:TextInput fontFamily="细明体" text="将非可视元素（例如服务、值对象）放在此处">
+		
+	</s:TextInput>
+	<mx:Text x="107" y="131" width="60" fontFamily="中易黑体" text="中国" textAlign="center">
+		
+	</mx:Text>
+</s:Application>
